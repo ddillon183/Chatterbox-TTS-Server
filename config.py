@@ -72,8 +72,8 @@ DEFAULT_CONFIG: Dict[str, Any] = {
     },
     "generation_defaults": {  # Default parameters for TTS audio generation.
         "temperature": 0.8,  # Controls randomness: lower is more deterministic.
-        "exaggeration": 0.5,  # Controls expressiveness or exaggeration in speech.
-        "cfg_weight": 0.5,  # Classifier-Free Guidance weight, influences adherence to prompt/style.
+        "exaggeration": 0.8,  # Controls expressiveness or exaggeration in speech.
+        "cfg_weight": 0.25,  # Classifier-Free Guidance weight, influences adherence to prompt/style.
         "seed": 0,  # Random seed for generation. 0 often means random or engine default.
         "speed_factor": 1.0,  # Controls the speed of the generated speech.
         "language": "en",  # Default language for TTS.
@@ -89,7 +89,7 @@ DEFAULT_CONFIG: Dict[str, Any] = {
         "last_predefined_voice": None,  # Filename of the last used predefined voice.
         "last_reference_file": None,  # Filename of the last used reference audio file.
         "last_seed": 0,  # Last used generation seed.
-        "last_chunk_size": 120,  # Last used chunk size for text splitting in UI.
+        "last_chunk_size": 240,  # Last used chunk size for text splitting in UI.
         "last_split_text_enabled": True,  # Whether text splitting was last enabled in UI.
         "hide_chunk_warning": False,  # Flag to hide the chunking warning modal.
         "hide_generation_warning": False,  # Flag to hide the general generation quality notice modal.

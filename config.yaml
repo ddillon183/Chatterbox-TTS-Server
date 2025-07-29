@@ -20,8 +20,8 @@ paths:
   output: outputs
 generation_defaults:
   temperature: 0.8
-  exaggeration: 1.3
-  cfg_weight: 0.5
+  exaggeration: 0.8
+  cfg_weight: 0.25
   seed: 0
   speed_factor: 1.0
   language: en
@@ -37,7 +37,7 @@ ui_state:
 
     '
   last_voice_mode: predefined
-  last_predefined_voice: Emily.wav
+  last_predefined_voice: Austin.wav
   last_reference_file: Gianna.wav
   last_seed: 3000
   last_chunk_size: 240
