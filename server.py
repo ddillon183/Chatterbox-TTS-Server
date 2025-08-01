@@ -67,6 +67,8 @@ from models import (  # Pydantic models
 )
 import utils  # Utility functions
 
+import torch  # For GPU availability check
+
 from pydantic import BaseModel, Field
 
 
@@ -184,6 +186,15 @@ app = FastAPI(
     version="2.0.2",  # Version Bump
     lifespan=lifespan,
 )
+
+# ✅ GPU availability logging
+try:
+    import torch  # Ensure this is at the top of your file if not already
+    print(f"[INFO] CUDA available: {torch.cuda.is_available()} - "
+          f"{torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'CPU'}")
+except Exception as e:
+    print(f"[WARNING] Failed to check CUDA availability: {e}")
+
 
 # --- CORS Middleware ---
 app.add_middleware(
