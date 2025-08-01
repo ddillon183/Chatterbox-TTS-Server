@@ -12,11 +12,10 @@ chatterbox_image = (
         "praat-parselmouth", "s3tokenizer", "python-multipart"
     )
     .add_local_dir(".", remote_path="/root")
-    .with_gpu_config(gpu="A10G")  # or "T4" depending on your Modal plan
 )
 
 # 🚀 Declare function using app.function()
-@app.function(image=chatterbox_image, timeout=3600)
+@app.function(image=chatterbox_image, timeout=3600, gpu="A10G")
 @asgi_app()
 def fastapi_app():
     from server import app as chatterbox_fastapi
