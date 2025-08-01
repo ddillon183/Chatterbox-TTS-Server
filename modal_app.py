@@ -1,4 +1,4 @@
-from modal import App, Image, asgi_app
+from modal import App, Image, asgi_app, gpu
 
 app = App(name="chatterbox-server")
 
@@ -11,7 +11,8 @@ chatterbox_image = (
         "diffusers", "safetensors", "librosa", "soundfile", "pydub",
         "praat-parselmouth", "s3tokenizer", "python-multipart"
     )
-    .add_local_dir(".", remote_path="/root")  # replaces deprecated Mount
+    .add_local_dir(".", remote_path="/root")
+    .with_gpu_config(gpu="A10G")  # or "T4" depending on your Modal plan
 )
 
 # 🚀 Declare function using app.function()

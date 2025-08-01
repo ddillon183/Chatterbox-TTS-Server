@@ -79,7 +79,7 @@ DEFAULT_CONFIG: Dict[str, Any] = {
         "language": "en",  # Default language for TTS.
     },
     "audio_output": {  # Settings related to the format of generated audio.
-        "format": "wav",  # Output audio format (e.g., 'wav', 'mp3').
+        "format": "mp3",  # Output audio format (e.g., 'wav', 'mp3').
         "sample_rate": 24000,  # Sample rate of the output audio in Hz.
         "max_reference_duration_sec": 30,  # Maximum duration for reference audio files.
     },
@@ -89,7 +89,7 @@ DEFAULT_CONFIG: Dict[str, Any] = {
         "last_predefined_voice": None,  # Filename of the last used predefined voice.
         "last_reference_file": None,  # Filename of the last used reference audio file.
         "last_seed": 0,  # Last used generation seed.
-        "last_chunk_size": 240,  # Last used chunk size for text splitting in UI.
+        "last_chunk_size": 350,  # Last used chunk size for text splitting in UI.
         "last_split_text_enabled": True,  # Whether text splitting was last enabled in UI.
         "hide_chunk_warning": False,  # Flag to hide the chunking warning modal.
         "hide_generation_warning": False,  # Flag to hide the general generation quality notice modal.
