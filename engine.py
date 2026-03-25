@@ -170,9 +170,15 @@ def load_model() -> bool:
         )
         try:
             cache_dir = os.path.expanduser("~/.cache/huggingface")
-            if os.path.exists(cache_dir):
-                logger.warning(f"Clearing Hugging Face cache at startup: {cache_dir}")
+            marker_file = os.path.join(cache_dir, ".cleaned")
+
+            if os.path.exists(cache_dir) and not os.path.exists(marker_file):
+                logger.warning(f"Clearing Hugging Face cache (one-time cleanup): {cache_dir}")
                 shutil.rmtree(cache_dir, ignore_errors=True)
+
+                os.makedirs(cache_dir, exist_ok=True)
+                with open(marker_file, "w") as f:
+                    f.write("cleaned")
 
             chatterbox_model = ChatterboxTTS.from_pretrained(
                 device=model_device,
