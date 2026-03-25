@@ -5,6 +5,8 @@ import logging
 import random
 import numpy as np
 import torch
+import os
+import shutil
 from typing import Optional, Tuple
 from pathlib import Path
 
@@ -24,7 +26,7 @@ MODEL_LOADED: bool = False
 model_device: Optional[str] = (
     None  # Stores the resolved device string ('cuda' or 'cpu')
 )
-
+MAX_SAFE_CHARS = 500
 
 def set_seed(seed_value: int):
     """
@@ -167,9 +169,15 @@ def load_model() -> bool:
             f"Attempting to load model directly using from_pretrained (expected from Hugging Face repository: {model_repo_id_config} or library default)."
         )
         try:
-            # Directly use from_pretrained. This will utilize the standard Hugging Face cache.
-            # The ChatterboxTTS.from_pretrained method handles downloading if the model is not in the cache.
-            chatterbox_model = ChatterboxTTS.from_pretrained(device=model_device)
+            cache_dir = os.path.expanduser("~/.cache/huggingface")
+            if os.path.exists(cache_dir):
+                logger.warning(f"Clearing Hugging Face cache at startup: {cache_dir}")
+                shutil.rmtree(cache_dir, ignore_errors=True)
+
+            chatterbox_model = ChatterboxTTS.from_pretrained(
+                device=model_device,
+                force_download=True,
+            )
             # The actual repo ID used by from_pretrained is often internal to the library,
             # but logging the configured one provides user context.
             logger.info(
@@ -247,12 +255,19 @@ def synthesize(
                 "Using default (potentially random) generation behavior as seed is 0."
             )
 
+        if len(text) > MAX_SAFE_CHARS:
+            logger.warning(
+                f"Input text length {len(text)} exceeds safe limit of {MAX_SAFE_CHARS}. Truncating."
+            )
+            text = text[:MAX_SAFE_CHARS]
+
+        logger.info(f"Final synthesis text length: {len(text)}")
+
         logger.debug(
             f"Synthesizing with params: audio_prompt='{audio_prompt_path}', temp={temperature}, "
             f"exag={exaggeration}, cfg_weight={cfg_weight}, seed_applied_globally_if_nonzero={seed}"
         )
 
-        # Call the core model's generate method
         wav_tensor = chatterbox_model.generate(
             text=text,
             audio_prompt_path=audio_prompt_path,
@@ -266,6 +281,11 @@ def synthesize(
 
     except Exception as e:
         logger.error(f"Error during TTS synthesis: {e}", exc_info=True)
+
+        if "CUDA error" in str(e):
+            logger.error("CUDA failure detected. Exiting container so Modal can restart cleanly.")
+            os._exit(1)
+
         return None, None
 
 
