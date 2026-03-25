@@ -7,9 +7,20 @@ chatterbox_image = (
     Image.debian_slim()
     .apt_install("ffmpeg", "libsndfile1")
     .pip_install(
-        "fastapi", "uvicorn", "torch", "chatterbox-tts", "transformers",
-        "diffusers", "safetensors", "librosa", "soundfile", "pydub",
-        "praat-parselmouth", "s3tokenizer", "python-multipart"
+        "fastapi",
+        "uvicorn",
+        "chatterbox-tts",
+        "transformers",
+        "diffusers",
+        "safetensors",
+        "librosa",
+        "soundfile",
+        "pydub",
+        "praat-parselmouth",
+        "s3tokenizer",
+        "python-multipart",
+        "torch==2.2.0",
+        "torchaudio==2.2.0",
     )
     .add_local_dir(".", remote_path="/root")
 )
